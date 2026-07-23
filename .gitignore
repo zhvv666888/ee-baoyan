@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+.env
+.DS_Store
+data/programs.csv
+data/cases.csv
+data/*.log
+data/crawler/*
+!data/crawler/.gitkeep
+data/crawler/*.sqlite3
+data/crawler/cache/
+data/crawler/downloads/
+data/crawler/audit/
+data/crawler/review_queue.csv
+*.log

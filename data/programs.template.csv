@@ -1,0 +1,2 @@
+program_id,school,college,program_name,region,directions,degree_types,min_rank_percent,preferred_rank_percent,expected_school_tier,research_expectation,competition_expectation,english_min,required_strength,evidence_level,sample_size,data_year,source_url,notes,is_demo
+REAL-001,某大学,某学院,信息与通信工程,北京,无线通信|信号处理,academic_master|professional_master,10,5,3.5,3.0,2.0,450,70,A,30,2026,https://example.edu.cn/notice,字段必须有来源,false

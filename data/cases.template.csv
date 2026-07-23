@@ -1,0 +1,2 @@
+case_id,admission_year,undergraduate_school,school_tier,major,rank_percent,gpa,gpa_scale,cet4,cet6,research_level,competition_level,publication_level,project_level,directions,applied_program_id,stage,result,source_type,source_url,consent_to_open,notes
+CASE-001,2026,匿名大学,211,通信工程,8,3.7,4,560,510,3,3,1,3,无线通信|信号处理,REAL-001,summer_camp,admitted,anonymous_submission,,true,禁止包含姓名学号等个人信息

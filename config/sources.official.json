@@ -1,0 +1,368 @@
+{
+  "version": 1,
+  "global": {
+    "user_agent": "EEBaoyanCompass/0.2-dev (local-only; set CRAWLER_USER_AGENT before real crawling)",
+    "request_delay_seconds": 2.5,
+    "timeout_seconds": 25.0,
+    "cache_ttl_hours": 24,
+    "max_response_bytes": 8000000,
+    "download_pdf_text": true,
+    "max_pdf_bytes": 15000000,
+    "privacy_mode": "aggregate_only"
+  },
+  "sources": [
+    {
+      "source_id": "uestc-sice",
+      "school": "电子科技大学",
+      "college": "信息与通信工程学院",
+      "seed_urls": [
+        "https://www.sice.uestc.edu.cn/index/tzgg/yjsk.htm"
+      ],
+      "allowed_domains": [
+        "sice.uestc.edu.cn",
+        "www.sice.uestc.edu.cn"
+      ],
+      "include_keywords": [
+        "夏令营",
+        "优秀本科生选拔",
+        "推免",
+        "面试名单",
+        "优秀营员",
+        "拟录取"
+      ],
+      "exclude_keywords": [
+        "开题",
+        "课程",
+        "奖学金",
+        "学位"
+      ],
+      "detail_url_patterns": [
+        "/info/\\d+/\\d+\\.htm"
+      ],
+      "content_selectors": [
+        ".v_news_content",
+        "#vsb_content",
+        "article"
+      ],
+      "title_selectors": [
+        "title"
+      ],
+      "date_selectors": [
+        ".info",
+        ".time",
+        ".arti-metas"
+      ],
+      "pagination_keywords": [
+        "下一页",
+        "下页",
+        "next"
+      ],
+      "max_list_pages": 4,
+      "max_notices_per_run": 60,
+      "enabled": true
+    },
+    {
+      "source_id": "uestc-yz",
+      "school": "电子科技大学",
+      "college": "研究生招生办公室",
+      "seed_urls": [
+        "https://yz.uestc.edu.cn/index/zytz.htm",
+        "https://yz.uestc.edu.cn/zsxc1/xly.htm"
+      ],
+      "allowed_domains": [
+        "yz.uestc.edu.cn"
+      ],
+      "include_keywords": [
+        "夏令营",
+        "推免",
+        "推荐免试",
+        "拟录取",
+        "招生目录"
+      ],
+      "exclude_keywords": [
+        "统考",
+        "调剂",
+        "新生",
+        "博士专项"
+      ],
+      "detail_url_patterns": [
+        "/info/\\d+/\\d+\\.htm"
+      ],
+      "content_selectors": [
+        ".v_news_content",
+        "#vsb_content",
+        "article"
+      ],
+      "title_selectors": [
+        "h1",
+        "h2"
+      ],
+      "date_selectors": [
+        ".info",
+        ".time"
+      ],
+      "pagination_keywords": [
+        "下一页",
+        "下页",
+        "next"
+      ],
+      "max_list_pages": 3,
+      "max_notices_per_run": 50,
+      "enabled": true
+    },
+    {
+      "source_id": "bupt-sice",
+      "school": "北京邮电大学",
+      "college": "信息与通信工程学院",
+      "seed_urls": [
+        "https://sice.bupt.edu.cn/rcpy/yjsjy/zsgz.htm",
+        "https://sice.bupt.edu.cn/rcpy/yjsjy/zsgz/13.htm"
+      ],
+      "allowed_domains": [
+        "sice.bupt.edu.cn"
+      ],
+      "include_keywords": [
+        "夏令营",
+        "推免",
+        "推荐免试",
+        "优秀营员",
+        "拟录取",
+        "招生宣讲"
+      ],
+      "exclude_keywords": [
+        "统考",
+        "调剂",
+        "开题",
+        "课程"
+      ],
+      "detail_url_patterns": [
+        "/info/\\d+/\\d+\\.htm"
+      ],
+      "content_selectors": [
+        ".v_news_content",
+        "#vsb_content",
+        ".article-content",
+        "article"
+      ],
+      "title_selectors": [
+        "h1",
+        "h2"
+      ],
+      "date_selectors": [
+        ".info",
+        ".time",
+        ".arti-metas"
+      ],
+      "pagination_keywords": [
+        "下一页",
+        "下页",
+        "next"
+      ],
+      "max_list_pages": 4,
+      "max_notices_per_run": 60,
+      "enabled": false
+    },
+    {
+      "source_id": "bupt-yz",
+      "school": "北京邮电大学",
+      "college": "研究生招生办公室",
+      "seed_urls": [
+        "https://yzb.bupt.edu.cn/"
+      ],
+      "allowed_domains": [
+        "yzb.bupt.edu.cn"
+      ],
+      "include_keywords": [
+        "推免",
+        "推荐免试",
+        "夏令营",
+        "招生目录",
+        "拟录取"
+      ],
+      "exclude_keywords": [
+        "统考",
+        "调剂",
+        "新生"
+      ],
+      "detail_url_patterns": [
+        "/info/",
+        "/content/",
+        "\\.htm"
+      ],
+      "content_selectors": [
+        ".v_news_content",
+        "#vsb_content",
+        ".article-content",
+        "article"
+      ],
+      "title_selectors": [
+        "h1",
+        "h2"
+      ],
+      "date_selectors": [
+        ".info",
+        ".time"
+      ],
+      "pagination_keywords": [
+        "下一页",
+        "下页",
+        "next"
+      ],
+      "max_list_pages": 2,
+      "max_notices_per_run": 40,
+      "enabled": false
+    },
+    {
+      "source_id": "seu-radio",
+      "school": "东南大学",
+      "college": "信息科学与工程学院",
+      "seed_urls": [
+        "https://radio.seu.edu.cn/mxkstz/list.htm"
+      ],
+      "allowed_domains": [
+        "radio.seu.edu.cn"
+      ],
+      "include_keywords": [
+        "推免招生",
+        "夏令营",
+        "推免生预选拔",
+        "入选名单",
+        "优秀营员",
+        "拟录取"
+      ],
+      "exclude_keywords": [
+        "统考",
+        "博士补充选拔",
+        "奖学金",
+        "课程"
+      ],
+      "detail_url_patterns": [
+        "/20\\d{2}/\\d{4}/c\\d+a\\d+/page(?:m)?\\.htm"
+      ],
+      "content_selectors": [
+        ".wp_articlecontent",
+        ".article",
+        "article",
+        "#wp_content_w6_0"
+      ],
+      "title_selectors": [
+        "h1",
+        ".arti_title",
+        ".article-title"
+      ],
+      "date_selectors": [
+        ".arti_update",
+        ".arti_metas",
+        ".time"
+      ],
+      "pagination_keywords": [
+        "下一页",
+        "下页",
+        "next"
+      ],
+      "max_list_pages": 4,
+      "max_notices_per_run": 60,
+      "enabled": true
+    },
+    {
+      "source_id": "sjtu-seiee",
+      "school": "上海交通大学",
+      "college": "电子信息与电气工程学院及拆分后相关学院",
+      "seed_urls": [
+        "https://www.seiee.sjtu.edu.cn/yjspy_zsgz_sszs/",
+        "https://yzb.sjtu.edu.cn/"
+      ],
+      "allowed_domains": [
+        "seiee.sjtu.edu.cn",
+        "www.seiee.sjtu.edu.cn",
+        "yzb.sjtu.edu.cn"
+      ],
+      "include_keywords": [
+        "优秀生源",
+        "优才夏令营",
+        "夏令营",
+        "推免",
+        "推荐免试",
+        "拟录取"
+      ],
+      "exclude_keywords": [
+        "统考",
+        "调剂",
+        "新生",
+        "留学生"
+      ],
+      "detail_url_patterns": [
+        "/yjspy_zsgz_sszs/\\d+\\.html",
+        "/post/\\d+"
+      ],
+      "content_selectors": [
+        ".article-content",
+        ".v_news_content",
+        ".content",
+        "article"
+      ],
+      "title_selectors": [
+        "h1",
+        ".article-title",
+        ".title"
+      ],
+      "date_selectors": [
+        ".article-info",
+        ".time",
+        ".date"
+      ],
+      "pagination_keywords": [
+        "下一页",
+        "下页",
+        "next"
+      ],
+      "max_list_pages": 3,
+      "max_notices_per_run": 60,
+      "enabled": false
+    },
+    {
+      "source_id": "template-college",
+      "school": "请替换学校名称",
+      "college": "请替换学院名称",
+      "seed_urls": [
+        "https://example.edu.cn/admission/notices.htm"
+      ],
+      "allowed_domains": [
+        "example.edu.cn"
+      ],
+      "include_keywords": [
+        "夏令营",
+        "推免",
+        "优秀营员",
+        "拟录取"
+      ],
+      "exclude_keywords": [
+        "统考",
+        "调剂"
+      ],
+      "detail_url_patterns": [
+        "/info/\\d+/\\d+\\.htm"
+      ],
+      "content_selectors": [
+        ".v_news_content",
+        "article"
+      ],
+      "title_selectors": [
+        "h1",
+        "h2"
+      ],
+      "date_selectors": [
+        ".info",
+        ".time"
+      ],
+      "pagination_keywords": [
+        "下一页",
+        "下页",
+        "next"
+      ],
+      "max_list_pages": 3,
+      "max_notices_per_run": 50,
+      "enabled": false
+    }
+  ]
+}

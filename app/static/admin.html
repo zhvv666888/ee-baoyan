@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EE 保研罗盘 · 本地审核</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+  <style>
+    body { max-width: 1280px; margin: 0 auto; padding: 24px; }
+    .admin-banner { background: #fff4d6; border: 1px solid #e5b94c; padding: 12px 16px; margin-bottom: 20px; }
+    .admin-layout { display: grid; grid-template-columns: minmax(260px, 0.8fr) minmax(420px, 1.7fr); gap: 20px; }
+    .admin-list, .admin-detail { background: #fff; border: 1px solid #dfe5ec; border-radius: 12px; padding: 18px; }
+    .admin-list-row { border-top: 1px solid #edf0f3; padding: 12px 0; cursor: pointer; }
+    .admin-list-row:hover { background: #f7f9fb; }
+    .admin-meta { color: #667085; font-size: 13px; }
+    .admin-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .admin-form label { display: flex; flex-direction: column; gap: 5px; font-size: 13px; }
+    .admin-form input, .admin-form textarea, .admin-form select { padding: 8px; border: 1px solid #ccd4df; border-radius: 6px; }
+    .admin-form textarea { min-height: 72px; }
+    .wide { grid-column: 1 / -1; }
+    .admin-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
+    .admin-actions button { padding: 8px 12px; cursor: pointer; }
+    pre { white-space: pre-wrap; max-height: 260px; overflow: auto; background: #f7f9fb; padding: 12px; border-radius: 8px; }
+    @media (max-width: 850px) { .admin-layout, .admin-form { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="admin-banner">Local administration interface. Do not expose publicly without authentication.</div>
+  <header class="panel">
+    <h1>公告项目审核</h1>
+    <p id="mode-note">正在读取数据模式…</p>
+  </header>
+
+  <main class="admin-layout">
+    <section class="admin-list">
+      <div class="admin-actions">
+        <select id="status-filter">
+          <option value="">全部状态</option>
+          <option value="pending">pending</option>
+          <option value="reviewed">reviewed</option>
+          <option value="rejected">rejected</option>
+          <option value="published">published</option>
+        </select>
+        <input id="school-filter" placeholder="学校" />
+        <input id="college-filter" placeholder="学院" />
+        <input id="year-filter" type="number" placeholder="年份" />
+        <input id="notice-type-filter" placeholder="公告类型" />
+        <button id="refresh-btn">刷新</button>
+      </div>
+      <div id="draft-list">暂无草稿</div>
+    </section>
+
+    <section class="admin-detail">
+      <h2 id="detail-title">选择一个草稿</h2>
+      <p id="detail-status" class="admin-meta"></p>
+      <div id="detail-empty">从左侧选择草稿后查看公告和字段。</div>
+      <div id="detail-content" hidden>
+        <p><a id="source-link" target="_blank" rel="noreferrer">打开官方来源</a></p>
+        <h3>已脱敏公告正文</h3>
+        <pre id="notice-content"></pre>
+        <h3>可发布字段</h3>
+        <div class="admin-form" id="draft-form">
+          <label>学校<input data-field="school_name" /></label>
+          <label>学院<input data-field="college_name" /></label>
+          <label>专业项目<input data-field="program_name" /></label>
+          <label>专业代码<input data-field="program_code" /></label>
+          <label>年份<input data-field="year" type="number" /></label>
+          <label>地区<input data-field="region" /></label>
+          <label>研究方向（|分隔）<input data-field="research_directions" /></label>
+          <label>培养类型（|分隔）<input data-field="degree_types" /></label>
+          <label>申请阶段<input data-field="application_stage" /></label>
+          <label>排名要求百分比<input data-field="rank_requirement_percent" type="number" step="0.1" /></label>
+          <label>偏好排名百分比<input data-field="preferred_rank_percent" type="number" step="0.1" /></label>
+          <label>本科层次期望值<input data-field="expected_school_tier" type="number" step="0.1" /></label>
+          <label>科研期望值<input data-field="research_expectation" type="number" step="0.1" /></label>
+          <label>竞赛期望值<input data-field="competition_expectation" type="number" step="0.1" /></label>
+          <label>英语最低分<input data-field="english_min" type="number" /></label>
+          <label>招生人数<input data-field="enrollment_count" type="number" /></label>
+          <label>项目要求强度<input data-field="required_strength" type="number" step="0.1" /></label>
+          <label>样本量<input data-field="sample_size" type="number" /></label>
+          <label>证据等级<input data-field="evidence_level" /></label>
+          <label>抽取置信度<input data-field="extraction_confidence" type="number" step="0.01" /></label>
+          <label>四级要求<input data-field="cet4_requirement" type="number" /></label>
+          <label>六级要求<input data-field="cet6_requirement" type="number" /></label>
+          <label>考核方式<input data-field="assessment_mode" /></label>
+          <label class="wide">考核内容<textarea data-field="assessment_content"></textarea></label>
+          <label>报名开始<input data-field="application_start_date" /></label>
+          <label>报名截止<input data-field="application_deadline" /></label>
+          <label>活动开始<input data-field="activity_start_date" /></label>
+          <label>活动结束<input data-field="activity_end_date" /></label>
+          <label class="wide">审核备注<textarea data-field="reviewer_note"></textarea></label>
+        </div>
+        <p class="admin-meta">缺失字段：<span id="missing-fields"></span></p>
+        <div class="admin-actions">
+          <button data-action="save">保存修改</button>
+          <button data-action="approve">审核通过</button>
+          <button data-action="reject">驳回</button>
+          <button data-action="restore">恢复 pending</button>
+          <button data-action="publish">发布</button>
+          <button data-action="unpublish">撤销发布</button>
+        </div>
+        <h3>审核历史</h3>
+        <pre id="history"></pre>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    let selectedDraft = null;
+    const reviewer = 'local-reviewer';
+    const list = document.getElementById('draft-list');
+    const detailContent = document.getElementById('detail-content');
+    const detailEmpty = document.getElementById('detail-empty');
+
+    function esc(value) {
+      return String(value ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
+    }
+
+    async function refreshList() {
+      const params = new URLSearchParams({limit: '100'});
+      const filters = {
+        status: document.getElementById('status-filter').value,
+        school: document.getElementById('school-filter').value.trim(),
+        college: document.getElementById('college-filter').value.trim(),
+        year: document.getElementById('year-filter').value,
+        notice_type: document.getElementById('notice-type-filter').value.trim(),
+      };
+      Object.entries(filters).forEach(([key, value]) => { if (value) params.set(key, value); });
+      const query = `?${params.toString()}`;
+      const response = await fetch(`/api/admin/drafts${query}`);
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.detail || '读取草稿失败');
+      list.innerHTML = data.drafts.length ? data.drafts.map(draft => `
+        <div class="admin-list-row" data-id="${draft.draft_id}">
+          <strong>${esc(draft.program_name || '未填写专业项目')}</strong>
+          <div>${esc(draft.school_name || '')} · ${esc(draft.college_name || '')}</div>
+          <div class="admin-meta">${esc(draft.status)} · ${esc(draft.notice_title)} · ${esc(draft.updated_at)}</div>
+        </div>`).join('') : '<p>暂无草稿</p>';
+      list.querySelectorAll('[data-id]').forEach(node => node.addEventListener('click', () => loadDraft(Number(node.dataset.id))));
+    }
+
+    async function loadDraft(id) {
+      const response = await fetch(`/api/admin/drafts/${id}`);
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.detail || '读取草稿失败');
+      selectedDraft = data.draft;
+      document.getElementById('detail-title').textContent = data.draft.notice_title;
+      document.getElementById('detail-status').textContent = `${data.draft.status} · ${data.draft.source_title}`;
+      document.getElementById('source-link').href = data.draft.source_url;
+      document.getElementById('notice-content').textContent = data.draft.notice_content_text || '';
+      document.getElementById('missing-fields').textContent = data.draft.missing_fields.join(', ') || '无';
+      document.getElementById('history').textContent = JSON.stringify(data.history, null, 2);
+      document.querySelectorAll('[data-field]').forEach(input => {
+        const field = input.dataset.field;
+        const value = data.draft[field];
+        input.value = Array.isArray(value) ? value.join('|') : (value ?? '');
+      });
+      detailEmpty.hidden = true;
+      detailContent.hidden = false;
+    }
+
+    async function action(name) {
+      if (!selectedDraft) return;
+      if (name === 'save') {
+        const fields = {};
+        document.querySelectorAll('[data-field]').forEach(input => {
+          if (input.value !== '') fields[input.dataset.field] = input.value;
+        });
+        const response = await fetch(`/api/admin/drafts/${selectedDraft.draft_id}`, {
+          method: 'PUT', headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({fields, reviewer})
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.detail || '保存失败');
+      } else {
+        const response = await fetch(`/api/admin/drafts/${selectedDraft.draft_id}/${name}`, {
+          method: 'POST', headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({reviewer})
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.detail || '操作失败');
+      }
+      await refreshList();
+      await loadDraft(selectedDraft.draft_id);
+    }
+
+    document.getElementById('refresh-btn').addEventListener('click', () => refreshList().catch(error => alert(error.message)));
+    document.getElementById('status-filter').addEventListener('change', () => refreshList().catch(error => alert(error.message)));
+    document.querySelectorAll('[data-action]').forEach(button => button.addEventListener('click', () => action(button.dataset.action).catch(error => alert(error.message))));
+    fetch('/api/health').then(response => response.json()).then(data => { document.getElementById('mode-note').textContent = `当前 APP_DATA_MODE：${data.data_mode}`; });
+    refreshList().catch(error => { list.textContent = error.message; });
+  </script>
+</body>
+</html>

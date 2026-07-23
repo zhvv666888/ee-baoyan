@@ -1,0 +1,43 @@
+name: Official notice crawler
+
+on:
+  workflow_dispatch:
+    inputs:
+      source:
+        description: Optional source ID, for example uestc-sice
+        required: false
+        type: string
+      since:
+        description: Earliest date, YYYY-MM-DD
+        required: false
+        default: "2023-01-01"
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Crawl official sources
+        shell: bash
+        run: |
+          args=(--since "${{ inputs.since }}")
+          if [[ -n "${{ inputs.source }}" ]]; then
+            args+=(--source "${{ inputs.source }}")
+          fi
+          python scripts/crawl_official.py "${args[@]}" || true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: crawler-output
+          path: |
+            data/crawler/notices.sqlite3
+            data/crawler/review_queue.csv
+            data/crawler/last_run.json
+          if-no-files-found: warn
